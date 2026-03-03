@@ -98,6 +98,9 @@ All SQL scripts are located in the `/sql` directory.
 
 ## Project Structure
 
+## 📁 Project Structure
+
+```
 data/
 ├── raw/
 ├── analytics/
@@ -115,8 +118,7 @@ sql/
 └── 04_analytics_queries.sql
 
 README.md
-
----
+```
 
 ## Skills Demonstrated
 
