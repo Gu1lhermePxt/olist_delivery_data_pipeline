@@ -1,104 +1,115 @@
 # Olist Delivery Data Pipeline
 
-## Project Overview
+## Overview
 
-End-to-end analytical data pipeline built using the Brazilian Olist E-Commerce dataset.
+Production-style end-to-end data pipeline built using the Brazilian Olist E-Commerce dataset (~100k orders).
 
-This project transforms raw transactional data into an analytics-ready dataset and a dimensional SQL warehouse model, enabling Business Intelligence and Machine Learning use cases.
+This project transforms raw transactional data into:
 
----
+- An analytics-ready dataset (Parquet)
+- A dimensional Data Warehouse (Star Schema)
+- SQL-powered analytical layer for Business Intelligence
 
-## Objective
-
-Design and implement a complete data pipeline to:
-
-- Process raw e-commerce data
-- Engineer delivery performance metrics
-- Create an analytics-ready dataset
-- Model a dimensional Data Warehouse using Star Schema
-- Enable SQL-based analytical queries for BI
+The pipeline demonstrates real-world data engineering practices applied to e-commerce delivery analytics.
 
 ---
 
-## Dataset
+## Architecture
 
-Source: Brazilian E-Commerce Public Dataset by Olist  
-Period: 2016–2018  
-Orders: ~100,000  
-
-Main tables used:
-- orders
-- order_items
-- customers
-- sellers
-- products
+Raw CSV Data  
+→ Python ETL (Cleaning + Feature Engineering)  
+→ Analytics Dataset (Parquet)  
+→ Dimensional Modeling (Star Schema)  
+→ SQL Analytics Layer (Views & KPIs)
 
 ---
 
-## Python Analytical Pipeline
+## Business Objective
 
-### Steps
+Design a scalable data pipeline capable of:
 
-1. Raw CSV ingestion  
-2. Date parsing and null handling  
-3. Feature engineering:
-   - `delivery_time_days`
-4. Filtering only delivered orders  
-5. Generation of final analytics dataset  
-6. Persistence in Parquet format  
-
-### Core Metric
-
-`delivery_time_days`  
-Difference between purchase timestamp and delivery date.
-
-### SLA Analysis
-
-P95 delivery time: **29 days**  
-(95% of delivered orders arrive within 29 days)
+- Measuring delivery performance
+- Identifying SLA behavior
+- Enabling revenue and logistics analysis
+- Supporting BI dashboards and ML applications
 
 ---
 
-## Data Warehouse Layer (SQL)
+## Key Analytical Metric
 
-A dimensional Data Warehouse was implemented using a Star Schema approach.
+### delivery_time_days
+
+Calculated as:
+
+delivery_date - purchase_timestamp
+
+### SLA Insight
+
+P95 Delivery Time: 29 days  
+Meaning 95% of delivered orders arrive within 29 days.
+
+This metric enables logistics performance monitoring and SLA validation.
+
+---
+
+## Data Warehouse Model
+
+Star Schema implemented for analytical performance.
 
 ### Fact Tables
-
-- `fact_orders`
-- `fact_order_items`
+- fact_orders
+- fact_order_items
 
 ### Dimension Tables
+- dim_customer
+- dim_seller
+- dim_product
 
-- `dim_customer`
-- `dim_seller`
-- `dim_product`
-
-### Analytical Capabilities
-
-The SQL layer supports:
+Designed for:
 
 - Revenue by state  
 - Revenue by product category  
 - Monthly revenue trends  
-- Aggregated KPIs via SQL views  
+- Aggregated KPIs  
 
-All SQL scripts are located in the `/sql` directory.
+All SQL scripts are available in `/sql`.
 
 ---
 
-## Technical Decisions
+## Technical Stack
 
-- Only `order_status = delivered` considered to avoid skewed metrics  
-- Null values were not imputed to preserve statistical integrity  
-- Parquet chosen for efficiency and BI/ML compatibility  
-- Star Schema adopted for analytical performance and scalability  
+- Python (Pandas)
+- SQL
+- Parquet
+- Dimensional Modeling
+- Star Schema
+- Jupyter Notebook
+
+---
+
+## Engineering Decisions
+
+- Only delivered orders included to prevent skewed SLA metrics  
+- No null imputation to preserve statistical integrity  
+- Parquet format chosen for analytical efficiency  
+- Star Schema adopted for BI scalability  
+
+---
+
+## How to Run
+
+1. Place raw CSV files inside `data/raw/`
+2. Execute:
+
+```bash
+python etl/run_pipeline.py
+```
+
+3. Output dataset will be generated in `data/analytics/`
 
 ---
 
 ## Project Structure
-
-## 📁 Project Structure
 
 ```
 data/
@@ -120,21 +131,23 @@ sql/
 README.md
 ```
 
+---
+
 ## Skills Demonstrated
 
-- Data Cleaning & Transformation
-- Feature Engineering
-- Analytical Metric Design
-- Dimensional Modeling (Star Schema)
-- SQL Analytics
-- Data Persistence Optimization
-- BI-Oriented Data Structuring
+- ETL Development  
+- Feature Engineering  
+- Analytical Metric Design  
+- Data Warehouse Modeling  
+- SQL-Based KPI Design  
+- Data Optimization (Parquet)  
+- BI-Oriented Structuring  
 
 ---
 
 ## Future Improvements
 
-- Orchestration with Airflow
-- Deployment on AWS (S3 + RDS)
-- Automated testing for pipeline
-- Dashboard integration (Power BI / Looker)
+- Orchestration with Apache Airflow  
+- Deployment on AWS (S3 + RDS)  
+- CI/CD for pipeline validation  
+- Dashboard integration (Power BI / Looker)  
